@@ -1,8 +1,8 @@
 package utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import utils.exp.FoodAlreadyExistsExp;
-import utils.exp.FoodNotFoundExp;
+import utils.exceptions.FoodAlreadyExistsExp;
+import utils.exceptions.FoodNotFoundExp;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package utils.exp;
+package utils.exceptions;
 
 public class FoodNotFoundExp extends Exception {
 }
