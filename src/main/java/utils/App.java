@@ -26,13 +26,16 @@ public class App
 
     public void setRestaurants(ArrayList<Restaurant> inRestaurants) { restaurants = inRestaurants; }
 
-    public void clear() {
-        restaurants.clear();
-        customer.clear();
-    }
-
     public ArrayList<Restaurant> getRestaurants() {
         return restaurants;
+    }
+
+    public Map<String, Integer> getCart() {
+        return customer.getFoodCart();
+    }
+
+    public Customer getCustomer() {
+        return customer;
     }
 
     public int getIndexOfRestaurant(String jsonData, int nameOrRestaurantName) throws IOException {
@@ -197,10 +200,6 @@ public class App
             throw new FoodFromOtherRestaurantInCartExp();
     }
 
-    public Map<String, Integer> getCart() {
-        return customer.getFoodCart();
-    }
-
     public String getCartJson() throws IOException {
         return customer.getCartJson();
     }
@@ -237,15 +236,11 @@ public class App
         throw new NotFound404Exp();
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
     public void addCredit(int credit) {
         customer.addCredit(credit);
     }
 
-    public int sendPrice(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
+    public int getPrice(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
         if (!customer.isRestaurantSet() || customer.getFoodCart().isEmpty())
             throw new BadRequest400Exp();
         Restaurant restaurant = getRestaurantById(customer.getRestaurantId());
@@ -253,9 +248,14 @@ public class App
         return foodPrice;
     }
 
-    public int sendQuantity(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
+    public int getQuantity(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
         if (!customer.isRestaurantSet() || customer.getFoodCart().isEmpty())
             throw new BadRequest400Exp();
         return customer.getFoodQuantity(foodName);
+    }
+
+    public boolean isRestaurantInRange(String id, float distance) throws NotFound404Exp {
+        Restaurant restaurant = getRestaurantById(id);
+        return !(restaurant.getLocation().sendDistance() > distance);
     }
 }

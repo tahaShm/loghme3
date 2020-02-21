@@ -51,7 +51,6 @@ public class RestaurantsScheduler implements ServletContextListener {
                 ObjectMapper nameMapper = new ObjectMapper();
                 try {
                     loghmeBody = getUrlBody("http://138.197.181.131:8080/restaurants");
-                    System.out.println(loghmeBody);
                     restaurants = nameMapper.readValue(loghmeBody, ArrayList.class);
                 }
                 catch (Exception e) {
