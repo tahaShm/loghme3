@@ -9,6 +9,7 @@ public class Order {
     private double remainingTime;
     private String status;
     Restaurant restaurant;
+    long deliveryBeginTime;
 
     public Order(int id, Restaurant restaurant) {
         this.id = id;
@@ -30,6 +31,10 @@ public class Order {
     public String getStatus() {return status;}
 
     public Restaurant getRestaurant() {return restaurant;}
+
+    public void setDeliveryBeginTime(long time) {deliveryBeginTime = time;}
+
+    public long getDeliveryBeginTime() {return deliveryBeginTime;}
 
     public void addFood(Food food) {
         if (foods.containsKey(food))

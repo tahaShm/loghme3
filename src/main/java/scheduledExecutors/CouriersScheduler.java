@@ -7,6 +7,7 @@ import utils.*;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.lang.*;
 
 public class CouriersScheduler extends TimerTask {
     private ArrayList<Courier> couriers = null;
@@ -59,8 +60,9 @@ public class CouriersScheduler extends TimerTask {
                 time += Math.sqrt(Math.pow(restaurantLocation.getX() - closestCourier.getLocation().getX(), 2) + Math.pow(restaurantLocation.getY() - closestCourier.getLocation().getY(), 2));
                 time = time / closestCourier.getVelocity();
 
-                App.getInstance().getCustomer().getOrderById(order.getId()).setRemainingTime(time);
-                App.getInstance().getCustomer().getOrderById(order.getId()).setStatus("delivering");
+                order.setRemainingTime(time);
+                order.setStatus("delivering");
+                order.setDeliveryBeginTime(System.nanoTime());
 
                 Timer timer = new Timer();
                 TimerTask task = new ChangeCourierStatus(order);

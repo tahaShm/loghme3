@@ -33,6 +33,21 @@
 </ul>
 <div>
     status : <%=order.getStatus()%>
+    <%
+        if (order.getStatus().equals("delivering")) {
+            String timeRemaining;
+            int minutes = 0, seconds;
+            long currTime = System.nanoTime();
+            long timeDiff = (long) order.getRemainingTime() - ((currTime - order.getDeliveryBeginTime()) / 1000000000);
+            while (timeDiff >= 60) {
+                timeDiff -= 60;
+                minutes++;
+            }
+            seconds = (int) timeDiff;
+            timeRemaining = "remained time : " + minutes + " min " + seconds + " sec";
+            out.println("<div>" + timeRemaining + "</div>");
+        }
+    %>
 </div>
 </body>
 </html>
