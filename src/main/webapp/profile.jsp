@@ -40,7 +40,7 @@
                 for (Order order: orders) {
             %>
             <li>
-                <a href="/">order id : <%=order.getId()%></a>
+                <a href="/order?id=<%=order.getId()%>">order id : <%=order.getId()%></a>
             </li>
             <%
                 }

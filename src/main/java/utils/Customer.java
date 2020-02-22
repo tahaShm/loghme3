@@ -3,6 +3,7 @@ package utils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import utils.exceptions.OrderNotFound;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,5 +81,13 @@ public class Customer {
 
     public void addCredit(int toAddCredit) {
         credit += toAddCredit;
+    }
+
+    public Order getOrderById(int id) throws OrderNotFound {
+        for (Order order: orders) {
+            if (order.getId() == id)
+                return order;
+        }
+        throw new OrderNotFound();
     }
 }
