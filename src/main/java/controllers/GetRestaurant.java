@@ -22,6 +22,11 @@ public class GetRestaurant extends HttpServlet {
         StringTokenizer tokenizer = new StringTokenizer(request.getRequestURI(), "/");
         String command = tokenizer.nextToken();
         String id = tokenizer.nextToken();
+        if (tokenizer.hasMoreTokens()) {
+            response.setStatus(404);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/notFound.jsp");
+            requestDispatcher.forward(request, response);
+        }
 
         try {
             if (app.isRestaurantInRange(id, 170)) {

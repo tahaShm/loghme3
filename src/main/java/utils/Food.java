@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Food {
@@ -59,5 +60,28 @@ public class Food {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(this);
         return json;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Food food = (Food) o;
+        if (popularity != food.popularity) return false;
+        if (price != food.price) return false;
+        if (!Objects.equals(name, food.name)) return false;
+        if (!Objects.equals(description, food.description)) return false;
+        return Objects.equals(image, food.image);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (price ^ (price >>> 32));
+        result = 31 * result + (int) popularity;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (image != null ? image.hashCode() : 0);
+        return result;
     }
 }

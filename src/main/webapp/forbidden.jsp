@@ -4,6 +4,6 @@
     <title>Forbidden</title>
 </head>
 <body>
-    <h2>The restaurant you are looking for is out of your range!</h2>
+    <h2>403 Forbidden!</h2>
 </body>
 </html>

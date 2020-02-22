@@ -11,6 +11,7 @@ public class App
     private ArrayList<Restaurant> restaurants;
     private Customer customer;
     private static App singleApp = null;
+    private int lastOrderId = 0;
 
     private App() {
         restaurants = new ArrayList<>();
@@ -28,10 +29,6 @@ public class App
 
     public ArrayList<Restaurant> getRestaurants() {
         return restaurants;
-    }
-
-    public Map<String, Integer> getCart() {
-        return customer.getFoodCart();
     }
 
     public Customer getCustomer() {
@@ -150,51 +147,54 @@ public class App
             throw new RestaurantNotFoundExp();
     }
 
-    public void addToCart(String jsonData) throws RestaurantNotFoundExp, FoodFromOtherRestaurantInCartExp, FoodNotFoundExp, IOException{
-        boolean allowToAdd = false;
-        ObjectMapper nameMapper = new ObjectMapper();
-        Names newName = nameMapper.readValue(jsonData, Names.class);
-        String restaurantName = newName.getRestaurantName();
-
-        if (!customer.isRestaurantSet())
-            allowToAdd = true;
-        else {
-            String currentRestaurantName = customer.getRestaurantName();
-            if (currentRestaurantName.equals(restaurantName))
-                allowToAdd = true;
-        }
-
-        if (allowToAdd) {
-            int index = getIndexOfRestaurant(jsonData, 1);
-
-            String foodName = newName.getFoodName();
-
-            if (index >= 0){
-                if (restaurants.get(index).isFoodValid(foodName)) {
-                    customer.addFoodToCart(foodName, restaurantName);
-                }
-                else
-                    throw new FoodNotFoundExp();
-            }
-            else
-                throw new RestaurantNotFoundExp();
-        }
-        else {
-            throw new FoodFromOtherRestaurantInCartExp();
-        }
-    }
+//    public void addToCart(String jsonData) throws RestaurantNotFoundExp, FoodFromOtherRestaurantInCartExp, FoodNotFoundExp, IOException{
+//        boolean allowToAdd = false;
+//        ObjectMapper nameMapper = new ObjectMapper();
+//        Names newName = nameMapper.readValue(jsonData, Names.class);
+//        String restaurantName = newName.getRestaurantName();
+//
+//        if (!customer.isRestaurantSet())
+//            allowToAdd = true;
+//        else {
+//            String currentRestaurantName = customer.getRestaurantName();
+//            if (currentRestaurantName.equals(restaurantName))
+//                allowToAdd = true;
+//        }
+//
+//        if (allowToAdd) {
+//            int index = getIndexOfRestaurant(jsonData, 1);
+//
+//            String foodName = newName.getFoodName();
+//
+//            if (index >= 0){
+//                if (restaurants.get(index).isFoodValid(foodName)) {
+//                    customer.addFoodToCart(foodName, restaurantName);
+//                }
+//                else
+//                    throw new FoodNotFoundExp();
+//            }
+//            else
+//                throw new RestaurantNotFoundExp();
+//        }
+//        else {
+//            throw new FoodFromOtherRestaurantInCartExp();
+//        }
+//    }
 
     public void addToCart(Food food, Restaurant restaurant) throws FoodFromOtherRestaurantInCartExp {
         boolean allowToAdd = false;
-        if (!customer.isRestaurantSet())
+        if (customer.getCurrentOrder() == null) {
+            Order newOrder = new Order(lastOrderId, restaurant);
+            customer.setCurrentOrder(newOrder);
             allowToAdd = true;
+            lastOrderId++;
+        }
         else {
-            String currentRestaurantId = customer.getRestaurantId();
-            if (currentRestaurantId.equals(restaurant.getId()))
+            if (restaurant.getId().equals(customer.currentOrder.getRestaurant().getId()))
                 allowToAdd = true;
         }
         if (allowToAdd) {
-            customer.addFoodToCart(food.getName(), restaurant.getId());
+            customer.addFoodToCurrentOrder(food);
         }
         else
             throw new FoodFromOtherRestaurantInCartExp();
@@ -204,10 +204,9 @@ public class App
         return customer.getCartJson();
     }
 
-    public String finalizeOrder() throws IOException {
-        String jsonFoodCart = customer.getCartJson();
-        customer.freeCart();
-        return jsonFoodCart;
+    public void finalizeOrder() throws IOException {
+        customer.addOrder(customer.getCurrentOrder());
+        customer.emptyCurrentOrder();
     }
 
     public String getRecommendedRestaurants() throws IOException {
@@ -240,22 +239,30 @@ public class App
         customer.addCredit(credit);
     }
 
-    public int getPrice(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
-        if (!customer.isRestaurantSet() || customer.getFoodCart().isEmpty())
-            throw new BadRequest400Exp();
-        Restaurant restaurant = getRestaurantById(customer.getRestaurantId());
-        int foodPrice = restaurant.sendFoodPriceByName(foodName);
-        return foodPrice;
-    }
-
-    public int getQuantity(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
-        if (!customer.isRestaurantSet() || customer.getFoodCart().isEmpty())
-            throw new BadRequest400Exp();
-        return customer.getFoodQuantity(foodName);
-    }
+//    public int getPrice(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
+//        if (!customer.isRestaurantSet() || customer.getFoodCart().isEmpty())
+//            throw new BadRequest400Exp();
+//        Restaurant restaurant = getRestaurantById(customer.getRestaurantId());
+//        int foodPrice = restaurant.sendFoodPriceByName(foodName);
+//        return foodPrice;
+//    }
+//
+//    public int getQuantity(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
+//        if (!customer.isRestaurantSet() || customer.getFoodCart().isEmpty())
+//            throw new BadRequest400Exp();
+//        return customer.getFoodQuantity(foodName);
+//    }
 
     public boolean isRestaurantInRange(String id, float distance) throws NotFound404Exp {
         Restaurant restaurant = getRestaurantById(id);
         return !(restaurant.getLocation().sendDistance() > distance);
+    }
+
+    public Food getFoodByName(String foodName, Restaurant restaurant) throws FoodNotFoundExp {
+        for (Food food: restaurant.getMenu()) {
+            if (food.getName().equals(foodName))
+                return food;
+        }
+        throw new FoodNotFoundExp();
     }
 }

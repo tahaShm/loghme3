@@ -5,45 +5,18 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Customer {
-    private boolean restaurantIsSet = false;
-    private String restaurantId;
-    private String restaurantName;
-    private Map<String, Integer> foodCart = new HashMap<String, Integer>();
     private String id;
     private String name;
     private String phoneNumber;
     private String email;
     private int credit;
-
-    public void clear() {
-        restaurantIsSet = false;
-        restaurantId = "";
-        foodCart.clear();
-    }
-
-    public boolean isRestaurantSet() {
-        return restaurantIsSet;
-    }
-
-    public void setRestaurant(boolean restaurantIsSet) {
-        this.restaurantIsSet = restaurantIsSet;
-    }
-
-    public String getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(String restaurantId) { this.restaurantId = restaurantId; }
-
-    public String getRestaurantName() {
-        return restaurantName;
-    }
-
-    public void setRestaurantName(String restaurantName) { this.restaurantName = restaurantName; }
+    ArrayList<Order> orders = new ArrayList<>();
+    Order currentOrder = null;
 
     public String getName() {
         return name;
@@ -83,38 +56,29 @@ public class Customer {
         this.credit = credit;
     }
 
-    public Map<String, Integer> getFoodCart() { return foodCart; }
+    public ArrayList<Order> getOrders() { return orders; }
 
-    public void addFoodToCart(String foodName, String restaurantId) {
-        restaurantIsSet = true;
-        this.restaurantId = restaurantId;
-        for (Map.Entry<String, Integer> entry : foodCart.entrySet()) {
-            if (entry.getKey().equals(foodName)){
-                entry.setValue(entry.getValue() + 1);
-                return;
-            }
-        }
-        foodCart.put(foodName, 1);
+    public void setOrders(ArrayList<Order> orders) { this.orders = orders; }
+
+    public Order getCurrentOrder() { return currentOrder; }
+
+    public void setCurrentOrder(Order order) { this.currentOrder = order; }
+
+    public void addOrder(Order order) { orders.add(order); }
+
+    public void addFoodToCurrentOrder(Food food) {
+        currentOrder.addFood(food);
     }
+
+    public void emptyCurrentOrder() {currentOrder = null;}
 
     public String getCartJson() throws JsonParseException, JsonMappingException, IOException {
         ObjectMapper mapperObj = new ObjectMapper();
-        String foodCartJson = mapperObj.writeValueAsString(foodCart);
+        String foodCartJson = mapperObj.writeValueAsString(currentOrder);
         return foodCartJson;
-    }
-
-    public void freeCart() {
-        restaurantIsSet = false;
-        restaurantId = "";
-        restaurantName = "";
-        foodCart.clear();
     }
 
     public void addCredit(int toAddCredit) {
         credit += toAddCredit;
-    }
-
-    public int getFoodQuantity(String foodName) {
-        return foodCart.get(foodName);
     }
 }

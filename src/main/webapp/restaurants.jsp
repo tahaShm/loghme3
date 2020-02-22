@@ -38,7 +38,7 @@
         <td><%= restaurant.getId() %></td>
         <td><img class="logo" src=<%= restaurant.getLogo() %> alt="logo"></td>
         <td><%= restaurant.getName() %></td>
-        <td><%= restaurant.getLocation() %></td>
+        <td>(<%= restaurant.getLocation().getX() %>, <%= restaurant.getLocation().getY() %>)</td>
     </tr>
     <% } %>
 </table>
