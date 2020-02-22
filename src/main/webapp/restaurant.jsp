@@ -38,8 +38,19 @@
     <li>location: (<%=restaurant.getLocation().getX()%>, <%=restaurant.getLocation().getY()%>)</li>
     <li>logo: <img src=<%=restaurant.getLogo()%> alt="logo"></li>
 
-    <!-- IN CASE YOU WANT SOME BONUS : -->
-    <!-- <li>estimated delivery time: 10 min 2 sec </li> -->
+    <%
+        int second = 0, minute = 1;
+        double time;
+        double restaurantDistance = Math.sqrt(Math.pow(restaurant.getLocation().getX(), 2) + Math.pow(restaurant.getLocation().getY(), 2));
+        restaurantDistance += restaurantDistance / 2;
+        time = restaurantDistance / 5;
+        while (time >= 60) {
+            time -= 60;
+            minute++;
+        }
+        second = (int) time;
+        out.println("<li>estimated delivery time: " + minute + " min " + second + " sec </li>");
+    %>
 
     <li>menu:
         <ul>
