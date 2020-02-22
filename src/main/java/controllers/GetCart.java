@@ -1,5 +1,7 @@
 package controllers;
 
+import utils.App;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +15,10 @@ public class GetCart extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setStatus(200);
+        if (App.getInstance().getCustomer().getCurrentOrder() == null) {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/emptyCart.jsp");
+            requestDispatcher.forward(request, response);
+        }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/cart.jsp");
         requestDispatcher.forward(request, response);
     }
