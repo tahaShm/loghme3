@@ -1,9 +1,12 @@
 <%@ page import="utils.Customer" %>
 <%@ page import="utils.App" %>
+<%@ page import="utils.Order" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     Customer customer = App.getInstance().getCustomer();
+    ArrayList<Order> orders = App.getInstance().getCustomer().getOrders();
 %>
 
 <!DOCTYPE html>
@@ -33,18 +36,15 @@
     <li>
         Orders :
         <ul>
-<%--            <%--%>
-<%--                for (Order order: Orders) {--%>
-<%--            %>--%>
+            <%
+                for (Order order: orders) {
+            %>
             <li>
-                <a href="link to order page">order id : 1</a>
+                <a href="/">order id : <%=order.getId()%></a>
             </li>
-            <li>
-                <a href="link to order page">order id : 2</a>
-            </li>
-<%--            <%--%>
-<%--                }--%>
-<%--            %>--%>
+            <%
+                }
+            %>
         </ul>
     </li>
 </ul>
