@@ -29,7 +29,7 @@
     <li>phone number: <%=customer.getPhoneNumber()%></li>
     <li>email: <%=customer.getEmail()%></li>
     <li>credit: <%=customer.getCredit()%> Toman</li>
-    <form action="" method="POST">
+    <form action="/addCredit" method="POST">
         <button type="submit">increase</button>
         <input type="text" name="credit" value="" />
     </form>
