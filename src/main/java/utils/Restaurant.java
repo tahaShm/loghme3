@@ -13,6 +13,7 @@ public class Restaurant {
     private Location location;
     private String logo;
     private ArrayList<Food> menu = new ArrayList<>();
+    private ArrayList<PartyFood> partyFoods = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -53,6 +54,10 @@ public class Restaurant {
     public void setMenu (ArrayList<Food> menu) {
         this.menu = menu;
     }
+
+    public ArrayList<PartyFood> getPartyFoods() { return partyFoods; }
+
+    public void setPartyFoods(ArrayList<PartyFood> partyFoods) { this.partyFoods = partyFoods; }
 
     public int foodIdx(String foodName) {
         for (int i = 0; i < menu.size(); i++) {

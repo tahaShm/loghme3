@@ -279,4 +279,14 @@ public class App
         }
         throw new FoodNotFoundExp();
     }
+
+    public void addPartyRestaurants(ArrayList<Restaurant> partyRestaurants) {
+        for (Restaurant restaurant: partyRestaurants) {
+            for (PartyFood food: restaurant.getPartyFoods()) {
+                System.out.println(food.getName());
+                System.out.println(food.getNewPrice());
+                System.out.println(food.getCount());
+            }
+        }
+    }
 }
