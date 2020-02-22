@@ -1,6 +1,7 @@
 package utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import scheduledExecutors.CouriersScheduler;
 import utils.exceptions.*;
 
 import java.io.IOException;
@@ -210,6 +211,13 @@ public class App
             customer.emptyCurrentOrder();
             throw new NotEnoughCreditExp();
         }
+
+        customer.getCurrentOrder().setStatus("finding delivery");
+
+        Timer timer = new Timer();
+        TimerTask task = new CouriersScheduler(customer.getCurrentOrder());
+        timer.schedule(task, 0, 3000);
+
         customer.addCredit(-1 * cartPrice);
         customer.addOrder(customer.getCurrentOrder());
         customer.emptyCurrentOrder();

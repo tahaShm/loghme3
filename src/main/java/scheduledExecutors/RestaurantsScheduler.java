@@ -23,21 +23,6 @@ import java.util.concurrent.TimeUnit;
 public class RestaurantsScheduler implements ServletContextListener {
     private ScheduledExecutorService scheduler;
 
-    public String getUrlBody(String url) throws Exception {
-        URL urlObj = new URL(url);
-        Charset charset = Charset.forName("UTF8");
-        URLConnection urlConnection = urlObj.openConnection();
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        urlConnection.getInputStream(), charset));
-        String body = "", inputLine = "";
-
-        while ((inputLine = in.readLine()) != null)
-            body += inputLine;
-        in.close();
-        return body;
-    }
-
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -50,7 +35,7 @@ public class RestaurantsScheduler implements ServletContextListener {
                 ArrayList<Restaurant> convertedRestaurants;
                 ObjectMapper nameMapper = new ObjectMapper();
                 try {
-                    loghmeBody = getUrlBody("http://138.197.181.131:8080/restaurants");
+                    loghmeBody = HTTPHandler.getUrlBody("http://138.197.181.131:8080/restaurants");
                     restaurants = nameMapper.readValue(loghmeBody, ArrayList.class);
                 }
                 catch (Exception e) {

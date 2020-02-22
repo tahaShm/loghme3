@@ -6,7 +6,7 @@ import java.util.Map;
 public class Order {
     private HashMap<Food, Integer> foods = new HashMap<>();
     private int id;
-    private float remainingTime;
+    private double remainingTime;
     private String status;
     Restaurant restaurant;
 
@@ -17,7 +17,7 @@ public class Order {
 
     public void setId(int id) {this.id = id;}
 
-    public void setRemainingTime(float remainingTime) {this.remainingTime = remainingTime;}
+    public void setRemainingTime(double remainingTime) {this.remainingTime = remainingTime;}
 
     public void setStatus(String status) {this.status = status;}
 
@@ -25,7 +25,7 @@ public class Order {
 
     public int getId() {return id;}
 
-    public float getRemainingTime() {return remainingTime;}
+    public double getRemainingTime() {return remainingTime;}
 
     public String getStatus() {return status;}
 
