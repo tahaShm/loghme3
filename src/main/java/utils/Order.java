@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Order {
     private HashMap<Food, Integer> foods = new HashMap<>();
@@ -35,5 +36,13 @@ public class Order {
             foods.put(food, foods.get(food) + 1);
         else
             foods.put(food, 1);
+    }
+
+    public int overallPrice() {
+        int price = 0;
+        for (Map.Entry<Food, Integer> entry: foods.entrySet()) {
+            price += entry.getKey().getPrice() * entry.getValue();
+        }
+        return price;
     }
 }

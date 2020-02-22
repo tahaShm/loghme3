@@ -1,6 +1,7 @@
 package controllers;
 
 import utils.App;
+import utils.exceptions.NotEnoughCreditExp;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,7 +17,14 @@ public class Finalize extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         App app = App.getInstance();
-        app.finalizeOrder();
+        try {
+            app.finalizeOrder();
+        }
+        catch (NotEnoughCreditExp e) {
+            response.setStatus(400);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/notEnoughCredit.jsp");
+            requestDispatcher.forward(request, response);
+        }
 
         response.setStatus(200);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/profile.jsp");

@@ -21,7 +21,7 @@ public class AddCredit extends HttpServlet {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/forbidden.jsp");
             requestDispatcher.forward(request, response);
         }
-        App.getInstance().getCustomer().addCredit(Integer.valueOf(toAdd));
+        App.getInstance().addCredit(Integer.valueOf(toAdd));
         response.setStatus(200);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/profile.jsp");
         requestDispatcher.forward(request, response);

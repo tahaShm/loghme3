@@ -204,7 +204,13 @@ public class App
         return customer.getCartJson();
     }
 
-    public void finalizeOrder() throws IOException {
+    public void finalizeOrder() throws NotEnoughCreditExp {
+        int cartPrice = customer.cartOverallPrice();
+        if (cartPrice > customer.getCredit()) {
+            customer.emptyCurrentOrder();
+            throw new NotEnoughCreditExp();
+        }
+        customer.addCredit(-1 * cartPrice);
         customer.addOrder(customer.getCurrentOrder());
         customer.emptyCurrentOrder();
     }

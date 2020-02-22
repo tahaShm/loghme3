@@ -90,4 +90,8 @@ public class Customer {
         }
         throw new OrderNotFound();
     }
+
+    public int cartOverallPrice() {
+        return currentOrder.overallPrice();
+    }
 }
