@@ -144,4 +144,8 @@ public class Restaurant {
             }
         }
     }
+
+    public void deletePartyFoods() {
+        partyFoods.clear();
+    }
 }

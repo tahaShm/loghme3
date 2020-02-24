@@ -26,7 +26,7 @@ public class App
         return singleApp;
     }
 
-    public void setRestaurants(ArrayList<Restaurant> inRestaurants) { restaurants = inRestaurants; }
+    public void setRestaurants(ArrayList<Restaurant> inRestaurants) { restaurants.addAll(inRestaurants); }
 
     public ArrayList<Restaurant> getRestaurants() {
         return restaurants;
@@ -280,9 +280,20 @@ public class App
         throw new FoodNotFoundExp();
     }
 
+    public void deletePreviousPartyFoods(){
+        for (Restaurant restaurant: restaurants) {
+            if (restaurant.getPartyFoods().size() > 0) {
+                restaurant.deletePartyFoods();
+            }
+        }
+    }
+
     public void addPartyRestaurants(ArrayList<Restaurant> partyRestaurants) {
+        deletePreviousPartyFoods();
         for (Restaurant restaurant: partyRestaurants) {
             Restaurant currentRestaurant = null;
+            System.out.println(restaurant.getId());
+            System.out.println(restaurant.getLocation().getX() + "  " + restaurant.getLocation().getY());
             try {
                 currentRestaurant = getRestaurantById(restaurant.getId());
             } catch (NotFound404Exp notFound404Exp) {
