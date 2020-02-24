@@ -1,5 +1,6 @@
 package controllers;
 
+import org.apache.commons.lang.StringUtils;
 import utils.App;
 import utils.exceptions.OrderNotFound;
 
@@ -15,8 +16,13 @@ import java.io.IOException;
 public class GetOrder extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String queryString = request.getQueryString();
-        int id = Integer.valueOf(queryString.substring(queryString.indexOf('=') + 1));
-
+        String StrId = queryString.substring(queryString.indexOf('=') + 1);
+        if (!StringUtils.isNumeric(StrId) || Integer.valueOf(StrId) <= 0) {
+            response.setStatus(403);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/forbidden.jsp");
+            requestDispatcher.forward(request, response);
+        }
+        int id = Integer.valueOf(StrId);
         try {
             App.getInstance().getCustomer().getOrderById(id);
         }

@@ -39,7 +39,7 @@
     <li>logo: <img src=<%=restaurant.getLogo()%> alt="logo"></li>
 
     <%
-        int second = 0, minute = 1;
+        int second = 0, minute = 1; //estimated time to find courier = 60 seconds
         double time;
         double restaurantDistance = Math.sqrt(Math.pow(restaurant.getLocation().getX(), 2) + Math.pow(restaurant.getLocation().getY(), 2));
         restaurantDistance += restaurantDistance / 2;
