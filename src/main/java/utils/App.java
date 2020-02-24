@@ -282,11 +282,14 @@ public class App
 
     public void addPartyRestaurants(ArrayList<Restaurant> partyRestaurants) {
         for (Restaurant restaurant: partyRestaurants) {
-            for (PartyFood food: restaurant.getPartyFoods()) {
-                System.out.println(food.getName());
-                System.out.println(food.getNewPrice());
-                System.out.println(food.getCount());
+            Restaurant currentRestaurant = null;
+            try {
+                currentRestaurant = getRestaurantById(restaurant.getId());
+            } catch (NotFound404Exp notFound404Exp) {
+                currentRestaurant = restaurant;
+                restaurants.add(restaurant);
             }
+            currentRestaurant.updateMenu();
         }
     }
 }

@@ -130,4 +130,18 @@ public class Restaurant {
 
         throw new FoodNotFoundExp();
     }
+
+    public void updateMenu() {
+        for (PartyFood partyFood: partyFoods) {
+            if (foodIdx(partyFood.getName()) == -1) {
+                Food newFood = new Food();
+                newFood.setName(partyFood.getName());
+                newFood.setDescription(partyFood.getDescription());
+                newFood.setImage(partyFood.getImage());
+                newFood.setPopularity(partyFood.getPopularity());
+                newFood.setPrice(partyFood.getPrice());
+                menu.add(newFood);
+            }
+        }
+    }
 }

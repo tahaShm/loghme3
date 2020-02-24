@@ -17,7 +17,7 @@ public class GetOrder extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String queryString = request.getQueryString();
         String StrId = queryString.substring(queryString.indexOf('=') + 1);
-        if (!StringUtils.isNumeric(StrId) || Integer.valueOf(StrId) <= 0) {
+        if (!StringUtils.isNumeric(StrId)) {
             response.setStatus(403);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/forbidden.jsp");
             requestDispatcher.forward(request, response);

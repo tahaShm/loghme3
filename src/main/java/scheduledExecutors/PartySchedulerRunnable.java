@@ -17,7 +17,7 @@ public class PartySchedulerRunnable implements Runnable {
             body = body.replaceAll("menu", "partyFoods");
             body = body.replaceAll("price", "newPrice");
             body = body.replaceAll("oldPrice", "price");
-            System.out.println(body);
+//            System.out.println(body);
             tempRestaurants = nameMapper.readValue(body, ArrayList.class);
         }
         catch (Exception e) {
