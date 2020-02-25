@@ -100,7 +100,10 @@ public class Customer {
     }
 
     public void clearCurrentPartyFoods() {
-        if (currentOrder != null)
+        if (currentOrder != null) {
             currentOrder.clearPartyFoods();
+            if (currentOrder.getFoods().size() == 0)
+                currentOrder = null;
+        }
     }
 }
