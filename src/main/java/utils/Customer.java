@@ -98,4 +98,9 @@ public class Customer {
     public int cartOverallPrice() {
         return currentOrder.overallPrice();
     }
+
+    public void clearCurrentPartyFoods() {
+        if (currentOrder != null)
+            currentOrder.clearPartyFoods();
+    }
 }

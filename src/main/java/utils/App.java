@@ -211,7 +211,10 @@ public class App
     public void finalizeOrder() throws NotEnoughCreditExp {
         int cartPrice = customer.cartOverallPrice();
         if (cartPrice > customer.getCredit()) {
+            Restaurant currentRestaurant = customer.getCurrentOrder().getRestaurant();
+            currentRestaurant.restorePreviousPartyCounts(customer.getCurrentOrder());
             customer.emptyCurrentOrder();
+
             throw new NotEnoughCreditExp();
         }
 
@@ -299,9 +302,16 @@ public class App
         }
     }
 
+    private void deletePreviousCustomerPartyFoods() {
+        customer.clearCurrentPartyFoods();
+    }
+
     public void addPartyRestaurants(ArrayList<Restaurant> partyRestaurants) {
         deletePreviousPartyFoods();
+        deletePreviousCustomerPartyFoods();
+//        System.out.println("new party: ");
         for (Restaurant restaurant: partyRestaurants) {
+//            System.out.println(restaurant.getId());
             Restaurant currentRestaurant = null;
             try {
                 currentRestaurant = getRestaurantById(restaurant.getId());

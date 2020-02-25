@@ -2,6 +2,7 @@
 <%@ page import="utils.Order" %>
 <%@ page import="utils.Food" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="utils.PartyFood" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -24,9 +25,17 @@
 <div><%=order.getRestaurant().getName()%></div>
 <ul>
     <%
-        for (Map.Entry<Food, Integer> entry : order.getFoods().entrySet()) {
-    %>
+    for (Map.Entry<Food, Integer> entry : order.getFoods().entrySet()) {
+%>
     <li><%=entry.getKey().getName()%>:‌<%=entry.getValue()%></li>
+    <%
+        }
+    %>
+
+    <%
+        for (Map.Entry<PartyFood, Integer> entry : order.getPartyFoods().entrySet()) {
+    %>
+    <li>( *** party *** ) <%=entry.getKey().getName()%>:‌<%=entry.getValue()%></li>
     <%
         }
     %>

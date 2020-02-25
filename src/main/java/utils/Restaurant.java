@@ -6,6 +6,7 @@ import utils.exceptions.FoodNotFoundExp;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Restaurant {
     private String id;
@@ -147,5 +148,22 @@ public class Restaurant {
 
     public void deletePartyFoods() {
         partyFoods.clear();
+    }
+
+    public void restorePreviousPartyCounts(Order currentOrder) {
+        for (Map.Entry<PartyFood, Integer> entry: currentOrder.getPartyFoods().entrySet()) {
+            PartyFood currentPartyFood = sendPartyFoodByName(entry.getKey().getName());
+            if (currentPartyFood != null)
+                currentPartyFood.setCount(currentPartyFood.getCount() + entry.getValue()); //restore previous number of current party food
+        }
+    }
+
+    private PartyFood sendPartyFoodByName(String currentPartyFoodName) {
+        for (PartyFood partyFood: partyFoods) {
+            if (partyFood.getName().equals(currentPartyFoodName)) {
+                return partyFood;
+            }
+        }
+        return null;
     }
 }
