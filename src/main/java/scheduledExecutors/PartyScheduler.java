@@ -23,7 +23,7 @@ public class PartyScheduler implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new PartySchedulerRunnable(), 0, 3, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(new PartySchedulerRunnable(), 0, 1, TimeUnit.MINUTES);
     }
 
     @Override

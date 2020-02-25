@@ -1,3 +1,7 @@
+<%@ page import="utils.App" %>
+<%@ page import="utils.Restaurant" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="utils.PartyFood" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,45 +26,39 @@
         }
     </style>
 </head>
+<%
+    App app = App.getInstance();
+    ArrayList<Restaurant> restaurants = app.getClosePartyRestaurants(170);
+%>
 <body>
 <ul>
-
-    <li>menu:
-        <ul>
-            <li>
-                <img src="url of food image" alt="logo">
-                <div>restaurant 1</div>
-                <div>food1</div>
-                <div>legendary food!</div>
-                <div class="old-price">20000 Toman</div>
-                <div>19000 Toman</div>
-                <div>remaining count:2</div>
-                <div>popularity: 0.4</div>
-                <form action="" method="POST">
-                    <!-- TODO: Add extra inputs to pass restaurant and food ids!  -->
-                    <button type="submit">addToCart</button>
-                </form>
+    <% for (Restaurant restaurant: restaurants) {
+        ArrayList<PartyFood> partyFoods = restaurant.getPartyFoods();
+        for (PartyFood partyFood: partyFoods) {
+    %>
+            <li>menu:
+                <ul>
+                    <li>
+                        <img src=<%= partyFood.getImage() %> alt="logo">
+                        <div><%= restaurant.getName() %></div>
+                        <div><%= partyFood.getName() %></div>
+                        <div><%= partyFood.getDescription() %></div>
+                        <div class="old-price"><%= partyFood.getPrice() %> Toman</div>
+                        <div><%= partyFood.getNewPrice() %> Toman</div>
+                        <div>remaining count: <%= partyFood.getCount() %></div>
+                        <div>popularity: <%= partyFood.getPopularity() %></div>
+                        <form action="/addToCart" method="POST">
+                            <input name="foodName" type="hidden" value="<%=partyFood.getName()%>">
+                            <input name="restaurantId" type="hidden" value="<%=restaurant.getId()%>">
+                            <input name="foodType" type="hidden" value="party">
+                            <button type="submit">addToCart</button>
+                        </form>
+                    </li>
+                </ul>
             </li>
-        </ul>
-    </li>
-    <li>menu:
-        <ul>
-            <li>
-                <img src="url of food image" alt="logo">
-                <div>restaurant 2</div>
-                <div>food2</div>
-                <div>legendary food 2!</div>
-                <div class="old-price">30000 Toman</div>
-                <div>29000 Toman</div>
-                <div>remaining count:5</div>
-                <div>popularity: 0.8</div>
-                <form action="" method="POST">
-                    <!-- TODO: Add extra inputs to pass restaurant and food ids!  -->
-                    <button type="submit">addToCart</button>
-                </form>
-            </li>
-        </ul>
-    </li>
+    <%    }
+    }
+    %>
 </ul>
 </body>
 </html>

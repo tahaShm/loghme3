@@ -71,6 +71,10 @@ public class Customer {
         currentOrder.addFood(food);
     }
 
+    public void addPartyFoodToCurrentOrder(PartyFood partyFood) {
+        currentOrder.addPartyFood(partyFood);
+    }
+
     public void emptyCurrentOrder() {currentOrder = null;}
 
     public String getCartJson() throws JsonParseException, JsonMappingException, IOException {

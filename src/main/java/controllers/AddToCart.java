@@ -2,6 +2,7 @@ package controllers;
 
 import utils.App;
 import utils.Food;
+import utils.PartyFood;
 import utils.Restaurant;
 import utils.exceptions.FoodFromOtherRestaurantInCartExp;
 
@@ -25,11 +26,25 @@ public class AddToCart extends HttpServlet {
         byte[] bytes = foodName.getBytes(StandardCharsets.ISO_8859_1);
         foodName = new String(bytes, StandardCharsets.UTF_8);
         String restaurantId = request.getParameter("restaurantId");
+        String foodType = request.getParameter("foodType");
 
         try {
             Restaurant restaurant = app.getRestaurantById(restaurantId);
-            Food food = app.getFoodByName(foodName, restaurant);
-            app.addToCart(food, restaurant);
+            PartyFood partyFoodTest = app.getPartyFoodByName(foodName, restaurant);
+            if (foodType.equals("party") && partyFoodTest != null && partyFoodTest.getCount() > 0){
+                PartyFood partyFood = partyFoodTest;
+                app.addToCart(partyFood, restaurant);
+                partyFood.reduceCount();
+            }
+            else if (foodType.equals("party") && partyFoodTest != null && partyFoodTest.getCount() <= 0){
+                response.setStatus(403);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/forbidden.jsp");
+                requestDispatcher.forward(request, response);
+            }
+            else if (foodType.equals("normal")) {
+                Food food = app.getFoodByName(foodName, restaurant);
+                app.addToCart(food, restaurant);
+            }
         }
         catch (Exception e) {
             if (e instanceof FoodFromOtherRestaurantInCartExp) {
@@ -38,10 +53,15 @@ public class AddToCart extends HttpServlet {
                 requestDispatcher.forward(request, response);
             }
         }
-
         response.setStatus(200);
-        request.setAttribute("id", app.getCustomer().getCurrentOrder().getRestaurant().getId());
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/restaurant.jsp");
-        requestDispatcher.forward(request, response);
+        if (foodType.equals("normal")) {
+            request.setAttribute("id", app.getCustomer().getCurrentOrder().getRestaurant().getId());
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/restaurant.jsp");
+            requestDispatcher.forward(request, response);
+        }
+        else if (foodType.equals("party")){
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/party.jsp");
+            requestDispatcher.forward(request, response);
+        }
     }
 }

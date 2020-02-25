@@ -195,7 +195,10 @@ public class App
                 allowToAdd = true;
         }
         if (allowToAdd) {
-            customer.addFoodToCurrentOrder(food);
+            if (food instanceof PartyFood)
+                customer.addPartyFoodToCurrentOrder((PartyFood) food);
+            else
+                customer.addFoodToCurrentOrder(food);
         }
         else
             throw new FoodFromOtherRestaurantInCartExp();
@@ -280,6 +283,14 @@ public class App
         throw new FoodNotFoundExp();
     }
 
+    public PartyFood getPartyFoodByName(String foodName, Restaurant restaurant) {
+        for (PartyFood partyFood: restaurant.getPartyFoods()) {
+            if (partyFood.getName().equals(foodName))
+                return partyFood;
+        }
+        return null;
+    }
+
     public void deletePreviousPartyFoods(){
         for (Restaurant restaurant: restaurants) {
             if (restaurant.getPartyFoods().size() > 0) {
@@ -292,8 +303,6 @@ public class App
         deletePreviousPartyFoods();
         for (Restaurant restaurant: partyRestaurants) {
             Restaurant currentRestaurant = null;
-            System.out.println(restaurant.getId());
-            System.out.println(restaurant.getLocation().getX() + "  " + restaurant.getLocation().getY());
             try {
                 currentRestaurant = getRestaurantById(restaurant.getId());
             } catch (NotFound404Exp notFound404Exp) {
@@ -302,5 +311,14 @@ public class App
             }
             currentRestaurant.updateMenu();
         }
+    }
+
+    public ArrayList<Restaurant> getClosePartyRestaurants(float distance){
+        ArrayList<Restaurant> closeRestaurants = getCloseRestaurants(distance);
+        ArrayList<Restaurant> closePartyRestaurants = new ArrayList<>();
+        for (Restaurant restaurant: closeRestaurants)
+            if (restaurant.getPartyFoods().size() > 0)
+                closePartyRestaurants.add(restaurant);
+        return closePartyRestaurants;
     }
 }

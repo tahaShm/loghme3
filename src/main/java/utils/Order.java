@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class Order {
     private HashMap<Food, Integer> foods = new HashMap<>();
+    private HashMap<PartyFood, Integer> partyFoods = new HashMap<>();
     private int id;
     private double remainingTime;
     private String status;
@@ -23,6 +24,8 @@ public class Order {
     public void setStatus(String status) {this.status = status;}
 
     public HashMap<Food, Integer> getFoods() {return foods;}
+
+    public HashMap<PartyFood, Integer> getPartyFoods() {return partyFoods;}
 
     public int getId() {return id;}
 
@@ -43,10 +46,20 @@ public class Order {
             foods.put(food, 1);
     }
 
+    public void addPartyFood(PartyFood partyFood) {
+        if (partyFoods.containsKey(partyFood))
+            partyFoods.put(partyFood, partyFoods.get(partyFood) + 1);
+        else
+            partyFoods.put(partyFood, 1);
+    }
+
     public int overallPrice() {
         int price = 0;
         for (Map.Entry<Food, Integer> entry: foods.entrySet()) {
             price += entry.getKey().getPrice() * entry.getValue();
+        }
+        for (Map.Entry<PartyFood, Integer> entry: partyFoods.entrySet()) {
+            price += entry.getKey().getNewPrice() * entry.getValue();
         }
         return price;
     }

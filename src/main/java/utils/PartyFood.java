@@ -11,4 +11,9 @@ public class PartyFood extends Food {
     public void setCount(int count) {this.count = count;}
 
     public int getCount() {return count;}
+
+    public void reduceCount() {
+        if (count > 0)
+            count -= 1;
+    }
 }
