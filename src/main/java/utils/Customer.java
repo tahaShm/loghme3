@@ -3,6 +3,7 @@ package utils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import utils.exceptions.ExtraFoodPartyExp;
 import utils.exceptions.OrderNotFound;
 
 import java.io.IOException;
@@ -71,7 +72,10 @@ public class Customer {
         currentOrder.addFood(food);
     }
 
-    public void addPartyFoodToCurrentOrder(PartyFood partyFood) {
+    public void addPartyFoodToCurrentOrder(PartyFood partyFood) throws ExtraFoodPartyExp {
+        if (currentOrder.getPartyFoods().containsKey(partyFood))
+            if (currentOrder.getPartyFoods().get(partyFood) + 1 > partyFood.getCount())
+                throw new ExtraFoodPartyExp();
         currentOrder.addPartyFood(partyFood);
     }
 

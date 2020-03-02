@@ -182,7 +182,7 @@ public class App
 //        }
 //    }
 
-    public void addToCart(Food food, Restaurant restaurant) throws FoodFromOtherRestaurantInCartExp {
+    public void addToCart(Food food, Restaurant restaurant) throws FoodFromOtherRestaurantInCartExp, ExtraFoodPartyExp {
         boolean allowToAdd = false;
         if (customer.getCurrentOrder() == null) {
             Order newOrder = new Order(lastOrderId, restaurant);
@@ -208,16 +208,16 @@ public class App
         return customer.getCartJson();
     }
 
-    public void finalizeOrder() throws NotEnoughCreditExp {
+    public void finalizeOrder() throws NotEnoughCreditExp, ExtraFoodPartyExp {
         int cartPrice = customer.cartOverallPrice();
+        Restaurant currentRestaurant = customer.getCurrentOrder().getRestaurant();
         if (cartPrice > customer.getCredit()) {
-            Restaurant currentRestaurant = customer.getCurrentOrder().getRestaurant();
-            currentRestaurant.restorePreviousPartyCounts(customer.getCurrentOrder());
+//            currentRestaurant.restorePreviousPartyCounts(customer.getCurrentOrder());
             customer.emptyCurrentOrder();
 
             throw new NotEnoughCreditExp();
         }
-
+        currentRestaurant.reducePartyFoodAmounts(customer.getCurrentOrder());
         customer.getCurrentOrder().setStatus("finding delivery");
 
         Timer timer = new Timer();

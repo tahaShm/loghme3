@@ -4,6 +4,7 @@ import utils.App;
 import utils.Food;
 import utils.PartyFood;
 import utils.Restaurant;
+import utils.exceptions.ExtraFoodPartyExp;
 import utils.exceptions.FoodFromOtherRestaurantInCartExp;
 
 import javax.servlet.RequestDispatcher;
@@ -34,7 +35,7 @@ public class AddToCart extends HttpServlet {
             if (foodType.equals("party") && partyFoodTest != null && partyFoodTest.getCount() > 0){
                 PartyFood partyFood = partyFoodTest;
                 app.addToCart(partyFood, restaurant);
-                partyFood.reduceCount();
+//                partyFood.reduceCount();
             }
             else if (foodType.equals("party") && partyFoodTest != null && partyFoodTest.getCount() <= 0){
                 response.setStatus(403);
@@ -47,7 +48,7 @@ public class AddToCart extends HttpServlet {
             }
         }
         catch (Exception e) {
-            if (e instanceof FoodFromOtherRestaurantInCartExp) {
+            if (e instanceof FoodFromOtherRestaurantInCartExp || e instanceof ExtraFoodPartyExp) {
                 response.setStatus(403);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/forbidden.jsp");
                 requestDispatcher.forward(request, response);

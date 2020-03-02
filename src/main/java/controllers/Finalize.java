@@ -1,6 +1,7 @@
 package controllers;
 
 import utils.App;
+import utils.exceptions.ExtraFoodPartyExp;
 import utils.exceptions.NotEnoughCreditExp;
 
 import javax.servlet.RequestDispatcher;
@@ -20,10 +21,17 @@ public class Finalize extends HttpServlet {
         try {
             app.finalizeOrder();
         }
-        catch (NotEnoughCreditExp e) {
-            response.setStatus(400);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/notEnoughCredit.jsp");
-            requestDispatcher.forward(request, response);
+        catch (NotEnoughCreditExp | ExtraFoodPartyExp e) {
+            if (e instanceof NotEnoughCreditExp){
+                response.setStatus(400);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/notEnoughCredit.jsp");
+                requestDispatcher.forward(request, response);
+            }
+            else if (e instanceof ExtraFoodPartyExp) {
+                response.setStatus(403);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/forbidden.jsp");
+                requestDispatcher.forward(request, response);
+            }
         }
 
         response.setStatus(200);
